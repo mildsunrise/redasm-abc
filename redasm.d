@@ -117,6 +117,7 @@ void processSWF(string root, SWFFile swf, SysTime mtime) {
       } else {
         processTag(root, tag.data, idx, mtime);
       }
+      tag.length = cast(uint) tag.data.length;
       idx++;
     }
   }
