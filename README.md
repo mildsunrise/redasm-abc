@@ -1,12 +1,12 @@
 # Robust, Easy [Dis-]Assembler for ActionScript Bytecode
 
-Did you know **[RABCDasm](https://github.com/CyberShadow/RABCDAsm)**, the robust ActionScript (dis)assembler?  
-**redasm-abc** aims to provide an easy-to-use assistant to it.
+Did you know **[RABCDAsm](https://github.com/CyberShadow/RABCDAsm)**, the robust ActionScript (dis)assembler?  
+**redasm-abc** aims to provide a simple, easy-to-use assistant to it.
 
 Forget about the export-disassemble-edit-assemble-replace process;
 note the difference:
 
-#### Pure RABCDasm
+#### Pure RABCDAsm
 
 ```bash
 $ abcexport file.swf
@@ -34,6 +34,23 @@ $ redasm
 ## Installation
 
 You need a working [D compiler](http://dlang.org) to build redasm-abc.
+It's recommended you install liblzma and its development files, otherwise
+redasm won't be able to handle LZMA-compressed SWFs.
+
+To build:
+
+```bash
+$ git submodule update --init
+$ rdmd build_redasm.d
+```
+
+If it succeeds, copy the resulting executable to your PATH:
+
+```bash
+$ sudo cp redasm /usr/local/bin
+```
+
+That's it! Now you should be able to do `redasm` from anywhere.
 
 
 ## Usage
@@ -42,13 +59,13 @@ Put the SWF you want to inspect in an empty directory.
 Then run `redasm` to extract all its ABC blocks and disassemble them.  
 Edit what you want, then run `redasm` again to apply the changes to the SWF.
 
-redasm-abc will create a directory for each disassembled ABC block.  
-By default, the directories are named `block-0`, `block-1`, `block-2`, ...  
-but you are free to *rename* them to your needs.
+redasm-abc will create a directory for each disassembled ABC block (`block-0`, `block-1`,
+`block-2`) where its dissassembly lives.  
+You shouldn't rename the directories or modify the SWF externally.
 
 
 ## Tips
 
 Always keep a backup of the original SWF, even if you just want to disassemble it.  
-After disassembling, add the files to version control (i.e. Git).
+Also read the [tips on RABCDAsm](https://github.com/cybershadow/rabcdasm#tips) itself.
 
