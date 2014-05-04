@@ -105,18 +105,18 @@ int main(string[] args) {
 void processSWF(string root, SWFFile swf, SysTime mtime) {
   int idx = 0;
   foreach (ref tag; swf.tags) {
-    if (tag.type == TagType.DoABC) {
-      processTag(root, tag.data, idx, mtime);
-      idx++;
-    }
-    if (tag.type == TagType.DoABC2) {
-      auto ptr = tag.data.ptr + 4; // skip flags
-      while (*ptr++) {} // skip name
+    if (tag.type == TagType.DoABC || tag.type == TagType.DoABC2) {
+      if (tag.type == TagType.DoABC2) {
+        auto ptr = tag.data.ptr + 4; // skip flags
+        while (*ptr++) {} // skip name
 
-      auto data = tag.data[ptr-tag.data.ptr..$];
-      auto header = tag.data[0..ptr-tag.data.ptr];
-      processTag(root, data, idx, mtime);
-      tag.data = header ~ data;
+        auto data = tag.data[ptr-tag.data.ptr..$];
+        auto header = tag.data[0..ptr-tag.data.ptr];
+        processTag(root, data, idx, mtime);
+        tag.data = header ~ data;
+      } else {
+        processTag(root, tag.data, idx, mtime);
+      }
       idx++;
     }
   }
