@@ -37,51 +37,56 @@ import swffile;
 //FIXME: stop at fs boundary
 //FIXME: lock the tagfile
 
-bool findRoot(ref string dir, out string tagfile) {
+bool findRoot(ref string dir, ref string tagfile) {
   dir = absolutePath(dir);
   while (true) {
-    tagfile = buildPath(dir, ".redasm");
     if (exists(tagfile) && isFile(tagfile)) return true;
     if (dir.length == 1) return false;
     dir = dirName(dir);
+    tagfile = buildPath(dir, baseName(tagfile));
   }
 }
 
+bool canCreateRoot(string root) {
+  auto files = array(dirEntries(root, SpanMode.shallow));
+  if (files.length != 1) return false;
+  return matchFirst(files[0].name, r"\.swf$").length() == 1;
+}
+
 int main(string[] args) {
-  // Find the root
   string root = ".";
-  string tagfile;
+  string tagfile = ".redasm";
   SysTime mtime = SysTime(0);
 
-  if (findRoot(root, tagfile)) {
-    writefln("Using root: %s", root);
-    SysTime atime;
-    getTimes(tagfile, atime, mtime);
+  if (canCreateRoot(root)) {
+    writeln("Creating a new disassembly.");
+  } else if (findRoot(root, tagfile)) {
+    writefln("Existing disassembly: %s", root);
+    mtime = timeLastModified(tagfile);
   } else {
-    writeln("Root not found, creating a new one.");
-    root = ".";
-    tagfile = ".redasm";
+    writeln("Can't find an existing disassembly.");
+    writeln("If you're trying to create one, please copy the .swf to an empty directory, and run redasm from there.");
+    return 1;
   }
 
-  // Find SWF
+  // Find the SWF
   auto swfFiles = array(dirEntries(root, "*.swf", SpanMode.shallow));
 
   if (swfFiles.length < 1) {
-    writeln("Error: no SWF file found at the root.");
+    writeln("Error: no SWF file was found.");
     return 1;
   }
   if (swfFiles.length > 1) {
-    writeln("Error: Too many SWF files found at the root.");
+    writeln("Error: Too many SWF files found.");
     return 1;
   }
 
-  // Verify time's correct
+  // Prepare
   auto swfFile = swfFiles[0];
   if (mtime.stdTime) {
-    SysTime batime, bmtime;
-    getTimes(swfFile.name, batime, bmtime);
-    if (bmtime != mtime) {
+    if (timeLastModified(swfFile.name) != mtime) {
       writeln("Error: Modification times don't match, SWF (or tag file) was probably modified externally.");
+      writefln("\nIf you want me to continue anyway, run:\n\n  touch %s %s\n", relativePath(swfFile), relativePath(tagfile));
       return 1;
     }
   }
@@ -145,7 +150,7 @@ void processTag(string root, ref ubyte[] data, int idx, SysTime mtime) {
       }
 
     } else {
-      writefln("%s: Skipping as it's not the first time.", name);
+      writefln("%s: Directory not found, skipping.", name);
     }
   } else {
     writefln("%s: Disassembling...", name);
@@ -154,6 +159,15 @@ void processTag(string root, ref ubyte[] data, int idx, SysTime mtime) {
     scope disassembler = new Disassembler(as, dir, name);
     disassembler.disassemble();
   }
+}
+
+
+// UTILITIES
+
+SysTime timeLastModified(in string file) {
+  SysTime atime, mtime;
+  getTimes(file, atime, mtime);
+  return mtime;
 }
 
 bool modifiedAfter(string dir, SysTime mtime) {
