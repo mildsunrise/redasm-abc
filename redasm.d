@@ -89,6 +89,9 @@ int main(string[] args) {
       writefln("\nIf you want me to continue anyway, run:\n\n  touch %s %s\n", relativePath(swfFile), relativePath(tagfile));
       return 1;
     }
+  } else {
+    // First run, make backup
+    copy(swfFile, swfFile ~ ".bak");
   }
 
   // Actually process the SWF
