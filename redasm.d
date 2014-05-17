@@ -140,11 +140,7 @@ void processTag(string root, ref ubyte[] data, int idx, SysTime mtime) {
 
       if (modifiedAfter(dir, mtime)) {
         writefln("%s: Reassembling...", name);
-        scope as = new ASProgram;
-        scope assembler = new Assembler(as);
-        assembler.assemble(buildPath(dir, name ~ ".main.asasm"));
-        scope abc = as.toABC();
-        data = abc.write();
+        assemble(dir, name, data);
       } else {
         writefln("%s: Up to date.", name);
       }
@@ -158,7 +154,18 @@ void processTag(string root, ref ubyte[] data, int idx, SysTime mtime) {
     scope as = ASProgram.fromABC(abc);
     scope disassembler = new Disassembler(as, dir, name);
     disassembler.disassemble();
+
+    // reassemble back to start clean
+    assemble(dir, name, data);
   }
+}
+
+void assemble(string dir, string name, ref ubyte[] data) {
+  scope as = new ASProgram;
+  scope assembler = new Assembler(as);
+  assembler.assemble(buildPath(dir, name ~ ".main.asasm"));
+  scope abc = as.toABC();
+  data = abc.write();
 }
 
 
