@@ -47,7 +47,7 @@ $ rdmd build_redasm.d
 If it succeeds, copy the resulting executable to your PATH:
 
 ```bash
-$ sudo cp redasm /usr/local/bin
+$ sudo install redasm /usr/local/bin
 ```
 
 That's it! Now you should be able to do `redasm` from anywhere.
@@ -60,12 +60,22 @@ Then run `redasm` to extract all its ABC blocks and disassemble them.
 Edit what you want, then run `redasm` again to apply the changes to the SWF.
 
 redasm-abc will create a directory for each disassembled ABC block (`block-0`, `block-1`,
-`block-2`) where its dissassembly lives.  
-You shouldn't rename the directories or modify the SWF externally.
+`block-2`) where its dissassembly lives. You shouldn't rename the directories or modify
+the SWF externally.
 
 
 ## Tips
 
-Always keep a backup of the original SWF, even if you just want to disassemble it.  
+Just after running `redasm` on an SWF, you should immediately add the files to i.e. Git,
+even if you're just planning to read the assembly.
+
+``` bash
+redasm
+git init && git add -A
+git commit -m "disassemble SWF"
+```
+
 Also read the [tips on RABCDAsm](https://github.com/cybershadow/rabcdasm#tips) itself.
 
+Before disassembling an SWF for the first time, `redasm` creates a backup of the SWF
+ending in `.bak`, at the same directory.
