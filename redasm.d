@@ -102,9 +102,8 @@ int main(string[] args) {
   // Store new time at the tagfile
   if (!mtime.stdTime)
     std.file.write(tagfile, "DON'T TOUCH OR MODIFY THIS FILE IN ANY WAY.\n");
-  SysTime batime, bmtime;
-  getTimes(swfFile.name, batime, bmtime);
-  setTimes(tagfile, batime, bmtime);
+  mtime = timeLastModified(swfFile.name);
+  setTimes(tagfile, mtime, mtime);
 
   return 0;
 }
