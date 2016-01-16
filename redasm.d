@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014, Alba Mendez                                           *
+ * Copyright 2014, 2016 Alba Mendez                                      *
  * This file is part of redasm-abc.                                        *
  *                                                                         *
  * redasm-abc is free software: you can redistribute it and/or modify      *

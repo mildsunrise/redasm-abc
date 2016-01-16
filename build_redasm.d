@@ -1,6 +1,6 @@
 /*
  *  Copyright 2010, 2011, 2012, 2013 Vladimir Panteleev <vladimir@thecybershadow.net>
- *  Copyright 2014, Alba Mendez
+ *  Copyright 2014, 2016 Alba Mendez
  *  This file is part of redasm-abc.
  *
  *  redasm-abc is free software: you can redistribute it and/or modify
