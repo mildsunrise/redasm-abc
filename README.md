@@ -1,34 +1,8 @@
 # Robust, Easy [Dis-]Assembler for ActionScript Bytecode
 
-Did you know **[RABCDAsm](https://github.com/CyberShadow/RABCDAsm)**, the robust ActionScript (dis)assembler?  
-**redasm-abc** aims to provide a simple, easy-to-use assistant to it.
-
-Forget about the export-disassemble-edit-assemble-replace process;
-note the difference:
-
-#### Pure RABCDAsm
-
-```bash
-$ abcexport file.swf
-$ rabcdasm file-0.abc
-$ rabcdasm file-1.abc
-$ rabcdasm file-2.abc
-$ # edit what you want...
-$ rabcasm file-0/file-0.main.asasm
-$ rabcasm file-1/file-1.main.asasm
-$ rabcasm file-2/file-2.main.asasm
-$ abcreplace file.swf 0 file-0/file-0.main.abc
-$ abcreplace file.swf 1 file-0/file-1.main.abc
-$ abcreplace file.swf 2 file-0/file-2.main.abc
-```
-
-#### redasm-abc
-
-```bash
-$ redasm
-$ # edit what you want...
-$ redasm
-```
+**redasm-abc** provides an easy and simple SWF reverse-engineering
+workflow using the excellent [RABCDAsm](https://github.com/CyberShadow/RABCDAsm) assembler.
+[Demo here](http://showterm.io/f8e8416a2968828a75353).
 
 
 ## Installation
@@ -50,7 +24,7 @@ If it succeeds, copy the resulting executable to your PATH:
 $ sudo install redasm /usr/local/bin
 ```
 
-That's it! Now you should be able to do `redasm` from anywhere.
+That's it! You should now be able to do `redasm` from anywhere.
 
 
 ## Usage
@@ -60,8 +34,8 @@ Then run `redasm` to extract all its ABC blocks and disassemble them.
 Edit what you want, then run `redasm` again to apply the changes to the SWF.
 
 redasm-abc will create a directory for each disassembled ABC block (`block-0`, `block-1`,
-`block-2`) where its dissassembly lives. You shouldn't rename the directories or modify
-the SWF externally.
+`block-2`) where its dissassembly lives. Never rename the directories
+themselves, nor modify the SWF yourself. This will confuse redasm-abc.
 
 
 ## Tips
