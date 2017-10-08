@@ -134,9 +134,6 @@ int main(string[] args)
 		foreach (program; programs)
 			compile(program);
 
-		if (haveLZMA)
-			compile("swflzmacompress");
-
 		return 0;
 	}
 	catch (Exception e)
